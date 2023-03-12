@@ -50,9 +50,23 @@ public class BookService {
         Book exist = bookRepository.getBookById(id);
         if (exist == null){
             System.out.println("Not found: ");
+            return;
         }
         if (exist.getAmount() < amount){
             System.out.println("kitob soni ozroq" + exist.getAmount());
+            return;
+        }
+        if (studentBookRepository.count(ComponentContainer.CURRENT_STUDENT.getId()) > 5){
+            System.out.println("your book amount > 5");
+            return;
+        }
+        if (exist.getAmount() == null){
+            System.out.println("Finish book:");
+            return;
+        }
+        if (exist.getId().equals(id)){
+           int num = (int) (exist.getAmount() - amount);
+            bookRepository.updateBookAmount(num,id);
         }
         for (int i = 0; i < amount; i++) {
             studentBookRepository.saveBookStudent(exist,ComponentContainer.CURRENT_STUDENT);

@@ -88,6 +88,7 @@ public class BookRepository {
     }
 
     public void updateBookAmount(double amount, int id) {
+        System.out.println(amount+id);
             try {
                 Connection con = database.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement("update book set amount =? where id =?");
