@@ -4,6 +4,7 @@ import org.example.dto.StudentBooks;
 import org.example.enums.EnumStatus;
 import org.example.repository.StudentBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.List;
 public class StudentBookService {
     @Autowired
     private StudentBookRepository studentBookRepository;
-
 
     public void getAdminByStudentTakenBooks() {
         List<StudentBooks> studentBooksList = studentBookRepository.getByTakenBookList(EnumStatus.TAKEN.name());
@@ -26,4 +26,5 @@ public class StudentBookService {
             System.out.println(studentBooks.toString());
         }
     }
+
 }

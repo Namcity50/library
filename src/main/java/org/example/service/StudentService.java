@@ -1,13 +1,10 @@
 package org.example.service;
 
 import org.example.dto.Student;
-import org.example.dto.StudentBooks;
 import org.example.enums.EnumStatus;
 import org.example.enums.EnumsRole;
-import org.example.repository.StudentBookRepository;
 import org.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,15 +27,12 @@ public class StudentService {
         return true;
     }
 
-    public boolean getAdmin(String phone) {
+    public Student getProfile(String phone) {
         Student exist = studentRepository.getByStudentPhone(phone);
         if (exist == null){
-            return false;
+            return null;
         }
-       else if (exist.getRole().equals(EnumsRole.ADMIN.name())){
-            return true;
-        }
-        return false;
+        return exist;
     }
 
     public boolean getStudent(String phone) {

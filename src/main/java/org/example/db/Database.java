@@ -105,7 +105,7 @@ public class Database {
                 "created_date date ," +
                 "status varchar(20) ," +
                 "return_date date ," +
-                "duration_date date ," +
+                "duration_date date," +
                 "book_id integer ," +
                 "student_id integer," +
                 "constraint student_fk foreign key (student_id)" +

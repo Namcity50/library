@@ -2,9 +2,8 @@ package org.example.controller;
 
 import org.example.container.ComponentContainer;
 import org.example.dto.Student;
-import org.example.repository.StudentRepository;
+import org.example.enums.EnumsRole;
 import org.example.service.StudentService;
-import org.example.util.MD5Util;
 import org.example.util.ScannerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,12 +43,13 @@ public class AuthController {
     private void singIn() {
         System.out.println("Phone Number:");
         String phone = ScannerUtil.getScanner().nextLine();
-        boolean bAdmin = studentService.getAdmin(phone);
-        boolean bStudent = studentService.getStudent(phone);
-        if (bAdmin){
-            adminController.start();
-        }else if (bStudent){
+        Student student = studentService.getProfile(phone);
+        if (student.getRole().equals(EnumsRole.STUDENT.name())){
+              ComponentContainer.CURRENT_STUDENT=student;
             studentController.start();
+        }
+        else if (student.getRole().equals(EnumsRole.ADMIN.name())) {
+            adminController.start();
         }
         System.out.println("Not Found: ");
     }
