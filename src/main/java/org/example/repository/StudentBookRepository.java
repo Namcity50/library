@@ -88,7 +88,6 @@ public class StudentBookRepository {
         int n = jdbcTemplate.update(sql);
         System.out.println(n);
     }
-
     public StudentBooks getBYBookID(Integer id, Integer stId) {
         String sql = "select * from studentBook where book_id = " + id +
                 " and student_id = " + stId + " and status = 'TAKEN' limit 1 ";

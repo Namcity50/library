@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.container.ComponentContainer;
 import org.example.dto.Book;
+import org.example.dto.Order;
 import org.example.dto.StudentBooks;
 import org.example.enums.EnumStatus;
 import org.example.repository.BookRepository;
@@ -21,8 +22,12 @@ public class BookService {
 
     public void getBookList() {
         List<Book> bookList = bookRepository.getByBookList();
+        List<Order> orderList = bookRepository.getOrderList();
         for (Book book : bookList) {
             System.out.println(book.toString());
+        }
+        for (Order order: orderList){
+            System.out.println("*******Order****** \n" + order.toString());
         }
     }
 
@@ -49,27 +54,23 @@ public class BookService {
         return true;
     }
 
-    public void getBookStudent(Integer id, double amount, LocalDate localDate) {
+    public void getBookStudent(Integer id, LocalDate localDate) {
         Book exist = bookRepository.getBookById(id);
-        if (exist == null){
+        if (exist == null) {
             System.out.println("Not found: ");
             return;
         }
-        if (exist.getAmount() < amount){
-            System.out.println("kitob soni ozroq" + exist.getAmount());
-            return;
-        }
-        if (studentBookRepository.count(ComponentContainer.CURRENT_STUDENT.getId()) > 5){
+        if (studentBookRepository.count(ComponentContainer.CURRENT_STUDENT.getId()) > 5) {
             System.out.println("your book amount > 5");
             return;
         }
-        if (exist.getAmount() == null){
+        if (exist.getAmount() == null) {
             System.out.println("Finish book:");
             return;
         }
-        if (exist.getId().equals(id)){
-           int num = (int) (exist.getAmount() - amount);
-            bookRepository.updateBookAmount(num,id);
+        if (exist.getId().equals(id)) {
+            int num = (int) (exist.getAmount() - 1);
+            bookRepository.updateBookAmount(num, id);
         }
         StudentBooks studentBooks = new StudentBooks();
         studentBooks.setStudent_id(ComponentContainer.CURRENT_STUDENT.getId());
@@ -77,8 +78,11 @@ public class BookService {
         studentBooks.setStatus(EnumStatus.TAKEN.name());
         studentBooks.setDuration(localDate);
         studentBooks.setReturnedDate(localDate);
-        for (int i = 0; i < amount; i++) {
-            studentBookRepository.saveBookStudent(studentBooks);
-        }
+        studentBookRepository.saveBookStudent(studentBooks);
+
+    }
+
+    public void addOrder(Order order) {
+        bookRepository.createOrder(order);
     }
 }

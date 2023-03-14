@@ -2,8 +2,11 @@ package org.example.repository;
 
 import org.example.db.Database;
 import org.example.dto.Book;
+import org.example.dto.Order;
 import org.example.dto.Student;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -14,6 +17,8 @@ import java.util.List;
 @Repository
 public class BookRepository {
     private final Database database;
+    @Autowired
+    public JdbcTemplate jdbcTemplate;
 
     public BookRepository(Database database) {
         this.database = database;
@@ -113,5 +118,18 @@ public class BookRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void createOrder(Order order) {
+        String sql = "insert into orderStudent (text,created_date,student_id) values ('%s',now(),'%s')";
+        sql = String.format(sql, order.getText(),order.getStudentId());
+        int n = jdbcTemplate.update(sql);
+        System.out.println(n);
+    }
+
+    public List<Order> getOrderList() {
+        String sql = "select * from orderStudent " ;
+        List<Order> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Order.class));
+        return list;
     }
 }

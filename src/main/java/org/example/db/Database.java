@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 @Component
 public class Database {
     //    public void createTableStudentBook() {
@@ -71,7 +72,7 @@ public class Database {
 //            throw new RuntimeException(e);
 //        }
 //    }
-    public  Connection getConnection() {
+    public Connection getConnection() {
         try {
             Class.forName("org.postgresql.Driver");
             return DriverManager.getConnection("jdbc:postgresql://localhost:5432/db_library", "postgres", "nukus111");
@@ -112,9 +113,17 @@ public class Database {
                 "references student(id) ," +
                 "constraint book_fk foreign key (book_id)" +
                 "references book(id));";
+        String orderTable = "create table if not exists orderStudent(" +
+                "id serial primary key," +
+                "text varchar(100)," +
+                "created_date date," +
+                "student_id integer," +
+                "constraint student_fk foreign key (student_id)" +
+                "references student(id));";
         execute(bookTable);
         execute(studentTable);
         execute(studentBook);
+        execute(orderTable);
     }
 
     public void execute(String sql) {

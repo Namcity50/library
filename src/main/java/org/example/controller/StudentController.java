@@ -1,5 +1,7 @@
 package org.example.controller;
 
+import org.example.container.ComponentContainer;
+import org.example.dto.Order;
 import org.example.service.BookService;
 import org.example.service.StudentBookService;
 import org.example.util.ScannerUtil;
@@ -14,7 +16,8 @@ public class StudentController {
     private BookService bookService;
     @Autowired
     private StudentBookService studentBookService;
-    public void menuStudent(){
+
+    public void menuStudent() {
         String menu = """
                 1 -> Book List:
                 2 -> Take Book: (kitob olish)
@@ -26,20 +29,34 @@ public class StudentController {
                 """;
         System.out.println(menu);
     }
-    public void start(){
+
+    public void start() {
         boolean flag = true;
         int act;
-        while (flag){
+        while (flag) {
             menuStudent();
             act = ScannerUtil.getScanner().nextInt();
-            switch (act){
+            switch (act) {
                 case 1 -> bookList();
                 case 2 -> takeBook();
                 case 3 -> takenBook();
                 case 4 -> returnBook();
                 case 5 -> studentBookList();
+                case 6 -> addOrder();
+                case 0 -> flag = false;
+                default -> System.out.println("Not found: ");
             }
         }
+    }
+
+    private void addOrder() {
+        System.out.println("Your Order: ");
+        String text = ScannerUtil.getScanner().nextLine();
+        Order order = new Order();
+        order.setStudentId(ComponentContainer.CURRENT_STUDENT.getId());
+        order.setText(text);
+        order.setCreatedDate(LocalDate.now());
+        bookService.addOrder(order);
     }
 
     private void studentBookList() {
@@ -59,15 +76,13 @@ public class StudentController {
     private void takeBook() {
         System.out.println("Book Id: ");
         Integer id = ScannerUtil.getScanner().nextInt();
-        System.out.println("Amount Book: ");
-        double amount = ScannerUtil.getScanner().nextInt();
         System.out.println("Duration Date:");
-        String durationDate= ScannerUtil.getScanner().nextLine();
+        String durationDate = ScannerUtil.getScanner().nextLine();
         LocalDate localDate = LocalDate.now().plusDays(Long.parseLong(durationDate));
-        bookService.getBookStudent(id,amount,localDate);
+        bookService.getBookStudent(id, localDate);
     }
 
     private void bookList() {
-      bookService.getBookList();
+        bookService.getBookList();
     }
 }
