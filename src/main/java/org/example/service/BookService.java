@@ -2,11 +2,14 @@ package org.example.service;
 
 import org.example.container.ComponentContainer;
 import org.example.dto.Book;
+import org.example.dto.StudentBooks;
+import org.example.enums.EnumStatus;
 import org.example.repository.BookRepository;
 import org.example.repository.StudentBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -46,7 +49,7 @@ public class BookService {
         return true;
     }
 
-    public void getBookStudent(Integer id, double amount) {
+    public void getBookStudent(Integer id, double amount, LocalDate localDate) {
         Book exist = bookRepository.getBookById(id);
         if (exist == null){
             System.out.println("Not found: ");
@@ -68,8 +71,14 @@ public class BookService {
            int num = (int) (exist.getAmount() - amount);
             bookRepository.updateBookAmount(num,id);
         }
+        StudentBooks studentBooks = new StudentBooks();
+        studentBooks.setStudent_id(ComponentContainer.CURRENT_STUDENT.getId());
+        studentBooks.setBook_id(exist.getId());
+        studentBooks.setStatus(EnumStatus.TAKEN.name());
+        studentBooks.setDuration(localDate);
+        studentBooks.setReturnedDate(localDate);
         for (int i = 0; i < amount; i++) {
-            studentBookRepository.saveBookStudent(exist,ComponentContainer.CURRENT_STUDENT);
+            studentBookRepository.saveBookStudent(studentBooks);
         }
     }
 }

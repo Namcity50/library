@@ -10,8 +10,8 @@ import java.time.LocalDate;
 @ToString
 public class StudentBooks {
     private Integer id;
-    private String student_id;
-    private String book_id;
+    private Integer student_id;
+    private Integer book_id;
     private LocalDate createdDate;
     private String status; //(TAKEN,RETURNED)
     private LocalDate  returnedDate;

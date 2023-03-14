@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.container.ComponentContainer;
 import org.example.dto.Book;
+import org.example.dto.GetStudentBook;
 import org.example.dto.StudentBooks;
 import org.example.enums.EnumStatus;
 import org.example.repository.BookRepository;
@@ -31,26 +32,21 @@ public class StudentBookService {
             System.out.println(studentBooks.toString());
         }
     }
-
     public void returnBookStudent(Integer id) {
-        StudentBooks exist = studentBookRepository.getBookId(id);
-        Book book = bookRepository.getBookById(Integer.parseInt(exist.getStudent_id()));
-        if (exist == null){
+        StudentBooks studentBooks = studentBookRepository.getBYBookID(id,ComponentContainer.CURRENT_STUDENT.getId());
+        if (studentBooks == null){
             System.out.println("not found: ");
-            return;
         }
-        if (exist.getStatus().equals(EnumStatus.TAKEN.name())){
-            studentBookRepository.updateStatus(EnumStatus.RETURN.name(),id);
-            bookRepository.updateBookAmount(book.getAmount()+1,id);
+        if (studentBooks.getStatus().equals(EnumStatus.TAKEN.name())){
+            studentBookRepository.updateStatus(EnumStatus.RETURN.name(),id,ComponentContainer.CURRENT_STUDENT.getId());
         }
     }
-
     public void returnBooksAll() {
-        List<StudentBooks> studentBooksList = studentBookRepository.returnBookList
+        List<GetStudentBook> getStudentBookList = studentBookRepository.returnBookList
                 (ComponentContainer.CURRENT_STUDENT.getId());
-        for (StudentBooks studentBooks: studentBooksList){
-            System.out.println(studentBooks.toString());
-        }
+       for (GetStudentBook getStudentBook: getStudentBookList){
+           System.out.println(getStudentBook.toString());
+       }
     }
 
 }

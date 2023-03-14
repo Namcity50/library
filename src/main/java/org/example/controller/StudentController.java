@@ -6,6 +6,8 @@ import org.example.util.ScannerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
+
 @Controller
 public class StudentController {
     @Autowired
@@ -46,7 +48,7 @@ public class StudentController {
 
     private void returnBook() {
         System.out.println("Book Id: ");
-        Integer id = ScannerUtil.getScanner().nextInt();System.out.println("Book Id: ");
+        Integer id = ScannerUtil.getScanner().nextInt();
         studentBookService.returnBookStudent(id);
     }
 
@@ -59,7 +61,10 @@ public class StudentController {
         Integer id = ScannerUtil.getScanner().nextInt();
         System.out.println("Amount Book: ");
         double amount = ScannerUtil.getScanner().nextInt();
-        bookService.getBookStudent(id,amount);
+        System.out.println("Duration Date:");
+        String durationDate= ScannerUtil.getScanner().nextLine();
+        LocalDate localDate = LocalDate.now().plusDays(Long.parseLong(durationDate));
+        bookService.getBookStudent(id,amount,localDate);
     }
 
     private void bookList() {
